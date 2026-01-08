@@ -78,7 +78,6 @@ ui <- fluidPage(
       tabsetPanel(
         tabPanel("Prefecture plot",  br(), plotlyOutput("prefecture_plot", height = "500px")),
         tabPanel("Prefecture table", br(), DTOutput("prefecture_table")),
-        tabPanel("Raw estimates",     br(), DTOutput("raw_table")),
         tabPanel("Map",              br(), leafletOutput("prefecture_map", height = "600px"))
       )
     )
@@ -226,27 +225,6 @@ server <- function(input, output, session) {
     
     datatable(
       dat,
-      options = list(pageLength = 20),
-      rownames = FALSE
-    )
-  })
-  
-  # ---- Raw estimates table ----
-  
-  output$raw_table <- renderDT({
-    dat <- filtered_data()
-    
-    datatable(
-      dat |>
-        select(
-          estimate_id, ref_id, country, admin1, admin2,
-          host_type, species_common, population_group,
-          n_tested, n_positive,
-          prev_prop,         # original from Excel (percent)
-          prev_percent,      # recomputed from counts
-          sampling_year_start, sampling_year_end,
-          assay_type, outcome_detail
-        ),
       options = list(pageLength = 20),
       rownames = FALSE
     )
