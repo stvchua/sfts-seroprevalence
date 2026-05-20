@@ -38,6 +38,12 @@ jobs:
           install.packages(c("jpinfect", "dplyr", "remotes"))
         shell: Rscript {0}
 
+      - name: Debug file structure
+        run: |
+          pwd
+          ls -la
+          ls -la R/ || echo "R/ folder not found"
+
       - name: Run SFTS download script
         run: Rscript R/fetch_sfts.R
 
