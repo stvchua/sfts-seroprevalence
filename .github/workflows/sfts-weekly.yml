@@ -2,10 +2,8 @@ name: SFTS Weekly Data Download
 
 on:
   schedule:
-    # Runs every Monday at 02:00 UTC
-    # JIHS typically publishes the previous week's data on Monday
     - cron: "0 2 * * 1"
-  workflow_dispatch:        # allows manual runs from the GitHub UI
+  workflow_dispatch:
     inputs:
       reason:
         description: "Reason for manual run"
@@ -15,7 +13,8 @@ jobs:
   fetch-sfts:
     runs-on: ubuntu-latest
     permissions:
-      contents: write       # needed to push committed data back to the repo
+      contents: write
+      issues: write
 
     steps:
       - name: Checkout repository
@@ -25,7 +24,7 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           r-version: "release"
-          use-public-rspm: true   # faster binary installs
+          use-public-rspm: true
 
       - name: Cache R packages
         uses: actions/cache@v4
@@ -37,8 +36,6 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("jpinfect", "dplyr", "remotes"))
-          # Uncomment for the latest provisional data:
-          # remotes::install_github("TomonoriHoshi/jpinfect")
         shell: Rscript {0}
 
       - name: Run SFTS download script
@@ -49,11 +46,10 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name  "github-actions[bot]"
           git add data/
-          # Only commit if there are changes
           git diff --staged --quiet || \
             git commit -m "data: update SFTS weekly data [$(date -u +%Y-%m-%d)]"
           git push
-          
+
       - name: Notify on failure
         if: failure()
         uses: actions/github-script@v7
@@ -65,6 +61,4 @@ jobs:
               title: `SFTS download failed – ${new Date().toISOString().slice(0,10)}`,
               body:  `The weekly SFTS data workflow failed. [View run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
               labels: ["automated", "data-pipeline"]
-            })    
-          
-          
+            })
