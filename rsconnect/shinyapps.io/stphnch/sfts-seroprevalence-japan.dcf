@@ -1,0 +1,12 @@
+name: sfts-seroprevalence-japan
+title: sfts-seroprevalence-japan
+username: stphnch
+account: stphnch
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16394379
+bundleId: 11433742
+url: https://stphnch.shinyapps.io/sfts-seroprevalence-japan/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
