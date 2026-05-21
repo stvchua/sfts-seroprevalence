@@ -1,4 +1,4 @@
-name: SFTS Weekly Data Download
+name: SFTS Monthly Data Download
 
 on:
   schedule:
